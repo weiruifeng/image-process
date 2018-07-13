@@ -6,3 +6,4 @@ node_modules
 .idea
 idea/vcs.xml
 /dist
+package-lock.json

@@ -1,0 +1,33 @@
+// 使用场景：形象色，页面大面积图标、文字使用颜色
+$color-major: #90A4AE;
+$color-major30: rgba(144, 163, 174, 0.30);
+
+// 使用场景：页面强调颜色，用于突出页面中重要功能的文字或按钮颜色
+$color-emphasize: #0384FB;
+$color-hover: rgba(3, 132, 251, 0.7);
+
+// 页面背景色
+$back-color: #F0F0F0;
+
+$background-white: #FFFFFF;
+$background-gray: #F5F7F7;
+// 页面主要文字，输入框输入后的文字颜色，做黑色使用
+$text-major-color: #333;
+
+// 辅助文字，配合主要文字加强页面层次
+$text-assist-color: #4E5D6B;
+
+$text-gray: #BAC3CC;
+$text-white: #FFFFFF;
+
+// 输入框未输入时的提示文字
+$input-hint-color: rgba(186, 195, 204, 0.4);
+
+$input-hover-color: rgba(186, 195, 204, 0.6);
+
+// 辅助信息，提示文字
+$text-hint-color: rgba(144, 164, 174, 0.7);
+
+$add-font: 16px;
+
+$title-color: #666666;

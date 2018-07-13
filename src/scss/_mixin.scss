@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+@import "./state";
+
+@mixin background($url) {
+  background: url($url) no-repeat;
+  background-size: contain;
+}
+
+@mixin size($width,$height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin sizeEqual($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin border-box-all() {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+@mixin heightCenter($height) {
+  height: $height;
+  line-height: $height;
+}
+
+@mixin sizeCenter($width,$height) {
+  width: $width;
+  height: $height;
+  line-height: $height;
+  text-align: center;
+}
+
+@mixin addButton($fontSize) {
+  font-size: $fontSize;
+  &:before {
+    content: '+';
+  }
+}

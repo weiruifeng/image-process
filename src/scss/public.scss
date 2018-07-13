@@ -1,0 +1,318 @@
+@charset "UTF-8";
+@import "./mixin";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+  background: rgb(240, 240, 240);
+}
+
+em, i {
+  font-style: normal;
+}
+
+body {
+  color: $text-major-color;
+  cursor: default;
+  font-family: Hiragino Sans GB, Microsoft YaHei;
+}
+
+form, img, table, td {
+  border: 0;
+}
+
+ul, ol, li {
+  list-style-type: none;
+  display: block;
+}
+
+/*
+  @名称: base
+  @功能: 重设浏览器默认样式
+*/
+
+/* 防止用户自定义背景颜色对网页的影响，添加让用户可以自定义字体 */
+
+/* 内外边距通常让各个浏览器样式的表现位置不同 */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  margin: 0;
+  padding: 0;
+}
+
+/* 重设 HTML5 标签, IE 需要在 js 中 createElement(TAG) */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+/* HTML5 媒体文件跟 img 保持一致 */
+audio, canvas, video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+
+input, select, textarea {
+  font-size: inherit;
+  outline: none;
+}
+
+/* 去掉各Table  cell 的边距并让其边重合 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* IE bug fixed: th 不继承 text-align*/
+th {
+  text-align: inherit;
+}
+
+/* 去除默认边框 */
+fieldset, img {
+  border: 0;
+}
+
+/* ie6 7 8(q) bug 显示为行内表现 */
+iframe {
+  display: block;
+}
+
+/* 去掉 firefox 下此元素的边框 */
+abbr, acronym {
+  border: 0;
+  font-variant: normal;
+}
+
+/* 一致的 del 样式 */
+del {
+  text-decoration: line-through;
+}
+
+address, caption, cite, code, dfn, em, th, var {
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* 去掉列表前的标识, li 会继承 */
+ol, ul {
+  list-style: none;
+}
+
+/* 对齐是排版最重要的因素, 别让什么都居中 */
+caption, th {
+  text-align: left;
+}
+
+/* 来自yahoo, 让标题都自定义, 适应多个系统应用 */
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: 500;
+}
+
+/* 统一上标和下标 */
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+/* 默认不显示下划线，保持页面简洁 */
+ins, a {
+  text-decoration: none;
+}
+
+a {
+  cursor: pointer;
+}
+
+input[type="text"],input[type="number"] {
+  background: #FFFFFF;
+  border: 1px solid #BAC3CC;
+  border-radius: 4px;
+  @include heightCenter(32px);
+  padding: 0 10px;
+  box-sizing: border-box;
+  color: #263038;
+  width: 186px;
+  &:disabled{
+    background-color: rgba(108, 108, 108, 0.1);
+  }
+}
+
+.text-box {
+  display: inline-block;
+  vertical-align: middle;
+  background: #FFFFFF;
+  border: 1px solid #BAC3CC;
+  border-radius: 4px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 10px;
+  min-width: 100px;
+  box-sizing: border-box;
+  color: #263038;
+  width: 186px;
+  background-color: rgba(108, 108,108,.1);
+}
+.row-box {
+  padding-bottom: 20px;
+}
+.enter-box {
+  display: inline-block;
+  padding-right: 10px;
+  vertical-align: top;
+  .enter-title {
+    padding-right: 4px;
+    @include heightCenter(32px);
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+  }
+  .radio-title {
+    padding-left: 4px;
+    @include heightCenter(32px);
+    display: inline-block;
+    width: 130px;
+  }
+}
+$button-color: rgba(3, 132, 251, .9);
+$hover-button-color: #0384FB;
+.button {
+  background: rgba(3, 132, 251, 0.9);
+  border: 0 solid rgba(3, 132, 251, 0.9);
+  outline: none;
+  list-style-type: none;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 20px;
+  padding: 0 25px;
+  font-size: 14px;
+  letter-spacing: 0.28px;
+  cursor: pointer;
+  color: #FFFFFF;
+  margin-right: 10px;
+  &:hover {
+    border: 0 solid $hover-button-color;
+    background: $hover-button-color;
+  }
+  &.disable {
+    background: rgba(185, 191, 196, .3);
+    border: 0 solid rgba(185, 191, 196, .3);
+  }
+}
+
+.fixed-all {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+}
+
+.cancel-button {
+  background: #FFFFFF;
+  border: 1px solid $button-color;
+  outline: none;
+  list-style-type: none;
+  @include heightCenter(32px);
+  border-radius: 20px;
+  padding: 0 25px;
+  font-size: 14px;
+  letter-spacing: 0.28px;
+  cursor: pointer;
+  color: $button-color;
+  &:hover {
+    border: 1px solid $hover-button-color;
+    color: $hover-button-color;
+  }
+}
+
+.ensure-button {
+  background: $button-color;
+  border: 0 solid $button-color;
+  outline: none;
+  list-style-type: none;
+  @include heightCenter(32px);
+  border-radius: 20px;
+  padding: 0 25px;
+  font-size: 14px;
+  letter-spacing: 0.28px;
+  cursor: pointer;
+  color: #FFFFFF;
+  &:hover {
+    border: 0 solid $hover-button-color;
+    background: $hover-button-color;
+  }
+  &.jc-disable {
+    background: rgba(185, 191, 196, .3);
+    border: 0 solid rgba(185, 191, 196, .3);
+  }
+}
+.now {
+  color: #0384FB !important;
+}
+
+.table-box {
+  width: 100%;
+  overflow-x: auto;
+  th {
+    white-space: nowrap;
+  }
+  tr {
+    &.selected {
+      background-color: rgba(128, 128, 128, .1);
+    }
+  }
+  .nowrap {
+    white-space: nowrap;
+  }
+}
+
+.dialog-text {
+  height: 50px;
+  line-height: 50px;
+}
+.input-upload-box {
+  input[type="file"] {
+    width: 0;
+    height: 0;
+  }
+  label {
+    &.ensure-button {
+      display: inline-block;
+      position: relative;
+      left: -5px;
+    }
+  }
+  .set-box {
+    padding: 20px 0;
+  }
+  .upload-box {
+    padding-bottom: 20px;
+    button {
+      margin-right: 16px;
+    }
+  }
+  .dialog-footer {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+

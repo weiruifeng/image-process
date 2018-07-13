@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "plugins": ["vue"],
+  "extends": ["vue"],
+  "parser": "babel-eslint",
+  "rules": {
+    "semi":[2,"always"],
+    "no-var": 2,
+    "indent": "off",
+    "space-before-function-paren": [2,"never"]
+  }
+}

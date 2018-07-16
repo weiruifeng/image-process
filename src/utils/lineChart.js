@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import * as d3 from 'd3';
 function lineChart(initData, id, strength = 10) {
     const dataSet = [];
     for (let i = 0, len = initData.length; i < len; i++) {

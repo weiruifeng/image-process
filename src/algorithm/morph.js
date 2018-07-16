@@ -79,6 +79,7 @@ function erosionDIB(data, lWidth, lHeight, nMode, structure) {
         }
     }
 }
+
 /**
  * 说明：
  * 该函数用于对图像进行腐蚀运算。
@@ -160,4 +161,168 @@ function dilationDIB(data, lWidth, lHeight, nMode, structure) {
         }
     }
 }
-export { erosionDIB, dilationDIB };
+
+/**
+ * 说明：
+ * 该函数用于对图像进行细化运算
+ * 要求目标图像为只有0和255两个灰度值的灰度图像
+ * @param data          图像数据
+ * @param lWidth        原图像宽度(像素数)
+ * @param lHeight       原图像高度(像素数)
+ */
+function thinDIB(data, lWidth, lHeight) {
+    // 保存原始数据
+    const dataInit = [];
+    for (let i = 0, len = data.length; i < len; i++) {
+        dataInit[i] = data[i];
+    }
+    let bModified = true;
+    const neighBour = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ];
+    while (bModified) {
+        bModified = false;
+        for (let j = 2; j < lHeight - 2; j++) {
+            for (let i = 2; i < lWidth - 2; i++) {
+                let bCondition1 = false;
+                let bCondition2 = false;
+                let bCondition3 = false;
+                let bCondition4 = false;
+                const lpSrc = j * lWidth + i;
+                // 如果原图像中当前点为白色，则跳过
+                if (dataInit[lpSrc * 4]) {
+                    continue;
+                }
+                // 获取当前点相邻的5*5区域内像素值，0代表白色，1代表黑色
+                for (let m = 0; m < 5; m++) {
+                    for (let n = 0; n < 5; n++) {
+                        const pixel = lpSrc + ((4 - m) - 2) * lWidth + (n - 2);
+                        neighBour[m][n] = (255 - dataInit[pixel * 4]) ? 1 : 0;
+                    }
+                }
+                // 逐个判断条件
+                // 判断 2<= NZ(P1)<=6
+                let nCount = neighBour[1][1] + neighBour[1][2] + neighBour[1][3] +
+                    neighBour[2][1] + neighBour[2][3] +
+                    neighBour[3][1] + neighBour[3][2] + neighBour[3][3];
+                if (nCount >= 2 && nCount <= 6) {
+                    bCondition1 = true;
+                }
+                // 判断Z0(P1) = 1
+                nCount = 0;
+                if (neighBour[1][2] === 0 && neighBour[1][1] === 1) {
+                    nCount++;
+                }
+                if (neighBour[1][1] === 0 && neighBour[2][1] === 1) {
+                    nCount++;
+                }
+                if (neighBour[2][1] === 0 && neighBour[3][1] === 1) {
+                    nCount++;
+                }
+                if (neighBour[3][1] === 0 && neighBour[3][2] === 1) {
+                    nCount++;
+                }
+                if (neighBour[3][2] === 0 && neighBour[3][3] === 1) {
+                    nCount++;
+                }
+                if (neighBour[3][3] === 0 && neighBour[2][3] === 1) {
+                    nCount++;
+                }
+                if (neighBour[2][3] === 0 && neighBour[1][3] === 1) {
+                    nCount++;
+                }
+                if (neighBour[1][3] === 0 && neighBour[1][2] === 1) {
+                    nCount++;
+                }
+                if (nCount === 1) {
+                    bCondition2 = true;
+                }
+                // 判断P2*P4*P8=0 or Z0(P2)!=1
+                if (neighBour[1][2] * neighBour[2][1] * neighBour[2][3] === 0) {
+                    bCondition3 = true;
+                } else {
+                    nCount = 0;
+                    if (neighBour[0][2] === 0 && neighBour[0][1] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[0][1] === 0 && neighBour[1][1] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[1][1] === 0 && neighBour[2][1] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[2][1] === 0 && neighBour[2][2] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[2][2] === 0 && neighBour[2][3] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[2][3] === 0 && neighBour[1][3] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[1][3] === 0 && neighBour[0][3] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[0][3] === 0 && neighBour[0][2] === 1) {
+                        nCount++;
+                    }
+                    if (nCount !== 1) {
+                        bCondition3 = true;
+                    }
+                }
+                // 判断P2*P4*P6=0 or Z0(P4)!=1
+                if (neighBour[1][2] * neighBour[2][1] * neighBour[3][2] === 0) {
+                    bCondition4 = true;
+                } else {
+                    nCount = 0;
+                    if (neighBour[1][1] === 0 && neighBour[1][0] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[1][0] === 0 && neighBour[2][0] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[2][0] === 0 && neighBour[3][0] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[3][0] === 0 && neighBour[3][1] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[3][1] === 0 && neighBour[3][2] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[3][2] === 0 && neighBour[2][2] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[2][2] === 0 && neighBour[1][2] === 1) {
+                        nCount++;
+                    }
+                    if (neighBour[1][2] === 0 && neighBour[1][1] === 1) {
+                        nCount++;
+                    }
+                    if (nCount !== 1) {
+                        bCondition4 = true;
+                    }
+                }
+                for (let k = 0; k < 3; k++) {
+                    if (bCondition1 && bCondition2 && bCondition3 && bCondition4) {
+                        data[lpSrc * 4 + k] = 255;
+                        bModified = true;
+                    } else {
+                        data[lpSrc * 4 + k] = 0;
+                    }
+                }
+            }
+        }
+        if (bModified) {
+            for (let i = 0, len = data.length; i < len; i++) {
+                dataInit[i] = data[i];
+            }
+        }
+    }
+}
+
+export { erosionDIB, dilationDIB, thinDIB };

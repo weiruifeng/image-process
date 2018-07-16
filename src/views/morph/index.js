@@ -1,5 +1,5 @@
 import { thresholdTrans } from '@/algorithm/thresholdTrans';
-import { erosionDIB, dilationDIB } from '@/algorithm/morph';
+import { erosionDIB, dilationDIB, thinDIB } from '@/algorithm/morph';
 import { gray } from '@/algorithm/gray';
 import { util } from '@/utils/util';
 export default {
@@ -108,6 +108,10 @@ export default {
         customizeCloseEvent() {
             dilationDIB(this.imgData.data, this.width, this.height, 2, this.structure);
             erosionDIB(this.imgData.data, this.width, this.height, 2, this.structure);
+            this.context.putImageData(this.imgData, 0, 0);
+        },
+        thinEvent() {
+            thinDIB(this.imgData.data, this.width, this.height);
             this.context.putImageData(this.imgData, 0, 0);
         }
     }

@@ -76,6 +76,8 @@
                     @click="verticalCloseEvent">垂直闭运算</button>
             <button class="button"
                     @click="customizeCloseEvent">自定义闭运算</button>
+            <button class="button"
+                    @click="thinEvent">细化</button>
         </div>
         <div class="body-box">
             <canvas id="myCanvas">抱歉，您的浏览器还不支持canvas。</canvas>

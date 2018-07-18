@@ -54,6 +54,13 @@ const routerArr = [
         component: resolve => {
             require.ensure([], () => resolve(require('@views/morph/index.vue').default), 'morph');
         }
+    },
+    {
+        path: '/edgecontour',
+        name: '边缘检测',
+        component: resolve => {
+            require.ensure([], () => resolve(require('@views/edgecontour/index.vue').default), 'edgecontour');
+        }
     }
 ];
 export { routerArr };

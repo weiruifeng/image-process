@@ -1,7 +1,18 @@
 <template>
     <section class="homepage">
+        <div class="row-box">
+            <div class="enter-box">
+                <label class="enter-title">
+                    阈值：
+                </label>
+                <input type="number" v-model.number="queryObj.bthre">
+            </div>
+        </div>
         <div class="button-box pad-top">
             <button class="button" @click="grayEvent">灰度处理</button>
+            <button class="button"
+                    :class="{'disable': !clickFlag}"
+                    @click="thresholdTransEvent">二值化变换</button>
             <button class="button" @click="resetEvent">恢复</button>
             <button class="button" @click="downLoadEvent">下载</button>
         </div>

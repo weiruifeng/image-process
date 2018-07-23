@@ -56,7 +56,7 @@ function houghDIB(data, lWidth, lHeight) {
             const key = Math.floor(iDist * iMaxAngleNumber + iAngleNumber);
             lpTransArea[key] = lpTransArea[key] || 0;
             if (lpTransArea[key] > maxValue1.value) {
-                maxValue1.value = key;
+                maxValue1.value = lpTransArea[key];
                 maxValue1.dist = iDist;
                 maxValue1.angleNumber = iAngleNumber;
             }
@@ -80,7 +80,7 @@ function houghDIB(data, lWidth, lHeight) {
             const key = Math.floor(iDist * iMaxAngleNumber + iAngleNumber);
             lpTransArea[key] = lpTransArea[key] || 0;
             if (lpTransArea[key] > maxValue2.value) {
-                maxValue2.value = key;
+                maxValue2.value = lpTransArea[key];
                 maxValue2.dist = iDist;
                 maxValue2.angleNumber = iAngleNumber;
             }
@@ -92,20 +92,22 @@ function houghDIB(data, lWidth, lHeight) {
         for (let j = 0; j < lHeight; j++) {
             for (let i = 0; i < lWidth; i++) {
                 const lpSrc = j * lWidth + i;
-                // 在第一条直线上
-                const iDist1 = Math.floor(Math.abs(i * Math.cos(maxValue1.angleNumber * 2 * Math.PI / 180) +
-                    j * Math.sin(maxValue1.angleNumber * 2 * Math.PI / 180)));
-                if (iDist1 === maxValue1.dist) {
-                    for (let k = 0; k < 3; k++) {
-                        data[lpSrc * 4 + k] = 0;
+                if (dataInit[lpSrc * 4] === 0) {
+                    // 在第一条直线上
+                    const iDist1 = Math.floor(Math.abs(i * Math.cos(maxValue1.angleNumber * 2 * Math.PI / 180) +
+                        j * Math.sin(maxValue1.angleNumber * 2 * Math.PI / 180)));
+                    if (iDist1 === maxValue1.dist) {
+                        for (let k = 0; k < 3; k++) {
+                            data[lpSrc * 4 + k] = 0;
+                        }
                     }
-                }
-                // 在第二条直线上
-                const iDist2 = Math.floor(Math.abs(i * Math.cos(maxValue2.angleNumber * 2 * Math.PI / 180) +
-                    j * Math.sin(maxValue2.angleNumber * 2 * Math.PI / 180)));
-                if (iDist2 === maxValue2.dist) {
-                    for (let k = 0; k < 3; k++) {
-                        data[lpSrc * 4 + k] = 0;
+                    // 在第二条直线上
+                    const iDist2 = Math.floor(Math.abs(i * Math.cos(maxValue2.angleNumber * 2 * Math.PI / 180) +
+                        j * Math.sin(maxValue2.angleNumber * 2 * Math.PI / 180)));
+                    if (iDist2 === maxValue2.dist) {
+                        for (let k = 0; k < 3; k++) {
+                            data[lpSrc * 4 + k] = 0;
+                        }
                     }
                 }
             }

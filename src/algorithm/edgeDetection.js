@@ -221,4 +221,118 @@ function GaussDIB(data, lWidth, lHeight) {
     };
     template(data, lWidth, lHeight, temObj);
 }
-export { robertDIB, sobelDIB, prewittDIB, kirschDIB, GaussDIB };
+
+/**
+ * 说明
+ * 该函数用于对图像进行轮廓提取运算
+ * 要求目标图像为只有0和255两个灰度值对灰度图像
+ * @param data
+ * @param lWidth
+ * @param lHeight
+ */
+function contourDIB(data, lWidth, lHeight) {
+    // 保存原始数据
+    const dataInit = [];
+    for (let i = 0, len = data.length; i < len; i++) {
+        dataInit[i] = data[i];
+    }
+    for (let j = 1; j < lHeight - 1; j++) {
+        for (let i = 1; i < lWidth - 1; i++) {
+            const lpSrc = j * lWidth + i;
+            const pixel = dataInit[lpSrc * 4];
+            if (pixel === 0) {
+                const surroundArr = [lpSrc + lWidth - 1, lpSrc + lWidth,
+                    lpSrc + lWidth + 1, lpSrc - 1, lpSrc + 1,
+                    lpSrc - lWidth - 1, lpSrc - lWidth, lpSrc - lWidth + 1];
+                let value = 0;
+                for (let m = 0, len = surroundArr.length; m < len; m++) {
+                    value += dataInit[surroundArr[m] * 4];
+                }
+                // 如果相邻对八个点都是黑点
+                if (value === 0) {
+                    for (let k = 0; k < 3; k++) {
+                        data[lpSrc * 4 + k] = 255;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 说明
+ * 该函数用于对图像进行轮廓跟踪运算
+ * 要求目标图像为只有0和255两个灰度值对灰度图像
+ * @param data
+ * @param lWidth
+ * @param lHeight
+ */
+function traceDIB(data, lWidth, lHeight) {
+    // 保存原始数据
+    const dataInit = [];
+    for (let i = 0, len = data.length; i < len; i++) {
+        dataInit[i] = data[i];
+        data[i] = 255;
+    }
+    const direction = [[-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0]];
+    const length = direction.length;
+    // 先找到最左上方对边界点
+    let bFindStartPoint = false;
+    // 是否扫描到一个边界点
+    let bFindPoint = false;
+    const startPoint = {
+        width: 0,
+        height: 0
+    };
+    const currentPoint = {
+        width: 0,
+        height: 0
+    };
+    for (let j = 0; j < lHeight && !bFindStartPoint; j++) {
+        for (let i = 0; i < lWidth && !bFindStartPoint; i++) {
+            const lpSrc = j * lWidth + i;
+            const pixel = dataInit[lpSrc * 4];
+            if (pixel === 0) {
+                bFindStartPoint = true;
+                startPoint.height = j;
+                startPoint.width = i;
+                // 寻找第一个点
+                for (let k = 0; k < 3; k++) {
+                    data[lpSrc * 4 + k] = 0;
+                }
+            }
+        }
+    }
+    let beginDirect = 0;
+    bFindStartPoint = false;
+    // 从初始点开始扫描
+    currentPoint.height = startPoint.height;
+    currentPoint.width = startPoint.width;
+    while (!bFindStartPoint) {
+        bFindPoint = false;
+        while (!bFindPoint) {
+            // 沿扫描方向查看一个像素
+            const lpSrc = (currentPoint.height + direction[beginDirect][1]) * lWidth +
+                (currentPoint.width + direction[beginDirect][0]);
+            const pixel = dataInit[lpSrc * 4];
+            if (pixel === 0) {
+                bFindPoint = true;
+                currentPoint.height = currentPoint.height + direction[beginDirect][1];
+                currentPoint.width = currentPoint.width + direction[beginDirect][0];
+                if (currentPoint.height === startPoint.height &&
+                    currentPoint.width === startPoint.width) {
+                    bFindStartPoint = true;
+                }
+                for (let k = 0; k < 3; k++) {
+                    data[lpSrc * 4 + k] = 0;
+                }
+                // 扫描点方向逆时针旋转两格
+                beginDirect = (beginDirect + length - 2) % length;
+            } else {
+                // 扫描点方向顺时针旋转一格
+                beginDirect = (beginDirect + 1) % length;
+            }
+        }
+    }
+}
+export { robertDIB, sobelDIB, prewittDIB, kirschDIB, GaussDIB, contourDIB, traceDIB };

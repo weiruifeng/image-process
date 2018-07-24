@@ -1,5 +1,5 @@
 import { thresholdTrans } from '@/algorithm/thresholdTrans';
-import { robertDIB, sobelDIB, prewittDIB, kirschDIB, GaussDIB } from '@/algorithm/edgeDetection';
+import { robertDIB, sobelDIB, prewittDIB, kirschDIB, GaussDIB, contourDIB, traceDIB } from '@/algorithm/edgeDetection';
 import { houghDIB } from '@/algorithm/hough';
 import { gray } from '@/algorithm/gray';
 import { util } from '@/utils/util';
@@ -77,11 +77,11 @@ export default {
             this.context.putImageData(this.imgData, 0, 0);
         },
         contourEvent() {
-            robertDIB(this.imgData.data, this.width, this.height);
+            contourDIB(this.imgData.data, this.width, this.height);
             this.context.putImageData(this.imgData, 0, 0);
         },
         traceEvent() {
-            robertDIB(this.imgData.data, this.width, this.height);
+            traceDIB(this.imgData.data, this.width, this.height);
             this.context.putImageData(this.imgData, 0, 0);
         },
         fillEvent() {

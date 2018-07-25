@@ -335,4 +335,190 @@ function traceDIB(data, lWidth, lHeight) {
         }
     }
 }
-export { robertDIB, sobelDIB, prewittDIB, kirschDIB, GaussDIB, contourDIB, traceDIB };
+
+/**
+ * 说明
+ * 该函数用于对图像进行种子填充运算
+ * 要求目标图像为只有0和255两个灰度值对灰度图像
+ * @param data
+ * @param lWidth
+ * @param lHeight
+ */
+function fillDIB(data, lWidth, lHeight) {
+    const seeds = [{
+        height: Math.floor(lHeight / 2),
+        width: Math.floor(lWidth / 2)
+    }];
+    while (seeds.length) {
+        // 取出种子
+        const seed = seeds.pop();
+        const iCurrentPixelx = seed.width;
+        const iCurrentPixely = seed.height;
+        const lpSrc = iCurrentPixely * lWidth + iCurrentPixelx;
+        const pixel = data[lpSrc * 4];
+        // 将当前点涂黑
+        for (let k = 0; k < 3; k++) {
+            data[lpSrc * 4 + k] = 0;
+        }
+        // 判断左面的点，如果为白，则压入堆栈,注意防止越界
+        if (iCurrentPixelx > 0) {
+            const lpSrc = iCurrentPixely * lWidth + iCurrentPixelx - 1;
+            const pixel = data[lpSrc * 4];
+            if (pixel === 255) {
+                seeds.push({
+                    height: iCurrentPixely,
+                    width: iCurrentPixelx - 1
+                });
+            }
+        }
+        // 判断上面的点，如果为白，则压入堆栈,注意防止越界
+        if (iCurrentPixely < lHeight - 1) {
+            const lpSrc = (iCurrentPixely + 1) * lWidth + iCurrentPixelx;
+            const pixel = data[lpSrc * 4];
+            if (pixel === 255) {
+                seeds.push({
+                    height: iCurrentPixely + 1,
+                    width: iCurrentPixelx
+                });
+            }
+        }
+        // 判断右面的点，如果为白，则压入堆栈,注意防止越界
+        if (iCurrentPixelx < lWidth - 1) {
+            const lpSrc = iCurrentPixely * lWidth + iCurrentPixelx + 1;
+            const pixel = data[lpSrc * 4];
+            if (pixel === 255) {
+                seeds.push({
+                    height: iCurrentPixely,
+                    width: iCurrentPixelx + 1
+                });
+            }
+        }
+        // 判断下面的点，如果为白，则压入堆栈,注意防止越界
+        if (iCurrentPixely > 0) {
+            const lpSrc = (iCurrentPixely - 1) * lWidth + iCurrentPixelx;
+            const pixel = data[lpSrc * 4];
+            if (pixel === 255) {
+                seeds.push({
+                    height: iCurrentPixely - 1,
+                    width: iCurrentPixelx
+                });
+            }
+        }
+    }
+}
+
+/**
+ * 说明
+ * 该函数用于对图像进行种子填充运算
+ * 要求目标图像为只有0和255两个灰度图像
+ * @param data
+ * @param lWidth
+ * @param lHeight
+ */
+function fill2DIB(data, lWidth, lHeight) {
+    const seeds = [{
+        height: Math.floor(lHeight / 2),
+        width: Math.floor(lWidth / 2)
+    }];
+    // 左右边界像素位置
+    let xl = 0;
+    let xr = 0;
+    while (seeds.length) {
+        // 取出种子
+        const seed = seeds.pop();
+        let iCurrentPixelx = seed.width;
+        let iCurrentPixely = seed.height;
+        let bFillLeft = true;
+        let bFillRight = true;
+        // 填充种子所在的行
+        // 保存种子像素的位置
+        const iBufferPixelx = iCurrentPixelx;
+        const iBufferPixely = iCurrentPixely;
+        // 先向左填充
+        while (bFillLeft) {
+            const lpSrc = lWidth * iCurrentPixely + iCurrentPixelx;
+            const pixel = data[lpSrc * 4];
+            // 遇到边界
+            if (pixel === 0) {
+                bFillLeft = false;
+                xl = iCurrentPixelx + 1;
+            } else {
+                for (let k = 0; k < 3; k++) {
+                    data[lpSrc * 4 + k] = 0;
+                }
+                iCurrentPixelx--;
+                // 防止越界
+                if (iCurrentPixelx < 0) {
+                    bFillLeft = false;
+                    iCurrentPixelx = 0;
+                    xl = 0;
+                }
+            }
+        }
+        // 再向右填充
+        // 取回种子像素的位置
+        iCurrentPixelx = iBufferPixelx + 1;
+        if (iCurrentPixelx > lWidth) {
+            bFillRight = false;
+            iCurrentPixelx = lWidth;
+            xr = lWidth;
+        }
+        iCurrentPixely = iBufferPixely;
+        while (bFillRight) {
+            const lpSrc = lWidth * iCurrentPixely + iCurrentPixelx;
+            const pixel = data[lpSrc * 4];
+            // 遇到边界
+            if (pixel === 0) {
+                bFillRight = false;
+                xr = iCurrentPixelx - 1;
+            } else {
+                for (let k = 0; k < 3; k++) {
+                    data[lpSrc * 4 + k] = 0;
+                }
+                iCurrentPixelx++;
+                // 防止越界
+                if (iCurrentPixelx > lWidth) {
+                    bFillRight = false;
+                    iCurrentPixelx = lWidth;
+                    xr = lWidth;
+                }
+            }
+        }
+        // 上下两条扫描线是否全为边界像素或已填充过
+        // 先看上面的扫描线
+        iCurrentPixely--;
+        if (iCurrentPixely < 0) {
+            iCurrentPixely = 0;
+        }
+        for (let i = xr; i >= xl; i--) {
+            const lpSrc = lWidth * iCurrentPixely + i;
+            const pixel = data[lpSrc * 4];
+            // 有未填充的像素，将新的种子压入堆栈
+            if (pixel === 255) {
+                seeds.push({
+                    height: iCurrentPixely,
+                    width: i
+                });
+                break;
+            }
+        }
+        // 再看看下面的扫描线
+        iCurrentPixely += 2;
+        if (iCurrentPixely > lHeight) {
+            iCurrentPixely = lHeight;
+        }
+        for (let i = xr; i >= xl; i--) {
+            const lpSrc = lWidth * iCurrentPixely + i;
+            const pixel = data[lpSrc * 4];
+            // 有未填充的像素，将新的种子压入堆栈
+            if (pixel === 255) {
+                seeds.push({
+                    height: iCurrentPixely,
+                    width: i
+                });
+                break;
+            }
+        }
+    }
+}
+export { robertDIB, sobelDIB, prewittDIB, kirschDIB, GaussDIB, contourDIB, traceDIB, fillDIB, fill2DIB };

@@ -3,6 +3,12 @@
         <div class="row-box">
             <div class="enter-box">
                 <label class="enter-title">
+                    阈值：
+                </label>
+                <input type="number" v-model.number="queryObj.bthre">
+            </div>
+            <div class="enter-box">
+                <label class="enter-title">
                     梯度锐化阈值：
                 </label>
                 <input type="number" v-model.number="bThre">
@@ -10,6 +16,7 @@
         </div>
         <div class="button-box pad-top">
             <button class="button" @click="grayEvent">灰度处理</button>
+            <button class="button" @click="thresholdTransEvent">二值化变换</button>
             <button class="button" @click="addNoiseEvent">添加噪声</button>
             <button class="button" @click="resetEvent">恢复</button>
             <button class="button" @click="downLoadEvent">下载</button>

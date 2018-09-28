@@ -1,3 +1,4 @@
+import { thresholdTrans } from '@/algorithm/thresholdTrans';
 import { medianFilter } from '@/algorithm/medianFilter';
 import { gradSharp } from '@/algorithm/gradSharp';
 import { template } from '@/algorithm/template';
@@ -51,7 +52,10 @@ export default {
                 iFilterMX: 1,
                 iFilterMY: 1
             },
-            bThre: 0
+            bThre: 0,
+            queryObj: {
+                bthre: 128
+            }
         };
     },
     mounted() {
@@ -71,6 +75,19 @@ export default {
         grayEvent() {
             gray(this.imgData.data);
             this.context.putImageData(this.imgData, 0, 0);
+        },
+        checkQuery() {
+            if (this.queryObj.bthre > 255 || this.queryObj.bthre < 0) {
+                this.$message('请检查输入条件');
+                return false;
+            }
+            return true;
+        },
+        thresholdTransEvent() {
+            if (this.checkQuery()) {
+                thresholdTrans(this.imgData.data, this.queryObj.bthre);
+                this.context.putImageData(this.imgData, 0, 0);
+            }
         },
         smoothEvent() {
             template(this.imgData.data, this.width, this.height, this.smoothObj);

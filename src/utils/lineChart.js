@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import * as d3 from 'd3';
-function lineChart(initData, id, strength = 10) {
+function lineChart(initData, id, strength = 1) {
     const dataSet = [];
     for (let i = 0, len = initData.length; i < len; i++) {
         if (initData[i]) {
@@ -9,7 +9,7 @@ function lineChart(initData, id, strength = 10) {
         }
     }
     // 图表的宽度和高度
-    const width = 600;
+    const width = 800;
     const height = 600;
     // 预留给轴线的距离
     const padding = { top: 50, right: 50, bottom: 50, left: 50 };
@@ -59,7 +59,7 @@ function lineChart(initData, id, strength = 10) {
         .attr('transform', 'translate(' + padding.left + ',' + padding.top + ')')
         .attr('d', linePath(dataSet))
         .attr('fill', 'none')
-        .attr('stroke-width', 3)
+        .attr('stroke-width', 1)
         .attr('stroke', 'rgba(3,132,251,.7');
 
     svg.append('g')
@@ -67,7 +67,7 @@ function lineChart(initData, id, strength = 10) {
         .data(dataSet)
         .enter()
         .append('circle')
-        .attr('r', 5)
+        .attr('r', 2)
         .attr('transform', function(d) {
             return 'translate(' + (xScale(d[0]) + padding.left) + ',' + (yScale(d[1]) + padding.top) + ')';
         })

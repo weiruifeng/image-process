@@ -355,7 +355,6 @@ function fillDIB(data, lWidth, lHeight) {
         const iCurrentPixelx = seed.width;
         const iCurrentPixely = seed.height;
         const lpSrc = iCurrentPixely * lWidth + iCurrentPixelx;
-        const pixel = data[lpSrc * 4];
         // 将当前点涂黑
         for (let k = 0; k < 3; k++) {
             data[lpSrc * 4 + k] = 0;

@@ -27,8 +27,8 @@ export default {
         },
         histogramEvent() {
             if (this.histogramFlag) {
-                const dataSet = statistics(this.imgData.data);
-                lineChart(dataSet, '#histogram');
+                const dataSet = statistics(this.imgData.data, 1);
+                lineChart(dataSet, '#histogram', 1);
             }
         }
     }

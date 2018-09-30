@@ -25,7 +25,6 @@
         <div class="button-box">
             <button class="button" @click="grayEvent">灰度处理</button>
             <button class="button"
-                    :class="{'disable': !clickFlag}"
                     @click="windowTransEvent">窗口变换</button>
             <button class="button" @click="resetEvent">恢复</button>
             <button class="button" @click="downLoadEvent">下载</button>

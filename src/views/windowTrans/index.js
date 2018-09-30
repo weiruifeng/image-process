@@ -14,8 +14,7 @@ export default {
             queryObj: {
                 bLow: 48,
                 bUp: 200
-            },
-            clickFlag: false
+            }
         };
     },
     mounted() {
@@ -28,7 +27,6 @@ export default {
         resetEvent() {
             const imgData = util.copyData(this.imgData, this.data);
             this.context.putImageData(imgData, 0, 0);
-            this.clickFlag = false;
         },
         checkQuery() {
             if (this.queryObj.bUp > 255 ||
@@ -40,7 +38,7 @@ export default {
             return true;
         },
         windowTransEvent() {
-            if (this.clickFlag && this.checkQuery()) {
+            if (this.checkQuery()) {
                 windowTrans(this.imgData.data, this.queryObj.bLow, this.queryObj.bUp);
                 this.context.putImageData(this.imgData, 0, 0);
             }
@@ -51,7 +49,6 @@ export default {
         grayEvent() {
             gray(this.imgData.data);
             this.context.putImageData(this.imgData, 0, 0);
-            this.clickFlag = true;
         }
     }
 };

@@ -40,6 +40,11 @@ function medianFilter(data, lWidth, lHeight, filterObj) {
     }
 }
 
+/**
+ * 将数组排序后获取中间的值
+ * @param bArray
+ * @returns {*|number}
+ */
 function getMedianNum(bArray) {
     const len = bArray.length;
     bArray.sort();

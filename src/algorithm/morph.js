@@ -178,16 +178,14 @@ function thinDIB(data, lWidth, lHeight) {
     }
     let bModified = true;
     const neighBour = [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0]
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
     ];
     while (bModified) {
         bModified = false;
-        for (let j = 2; j < lHeight - 2; j++) {
-            for (let i = 2; i < lWidth - 2; i++) {
+        for (let j = 1; j < lHeight - 1; j++) {
+            for (let i = 1; i < lWidth - 1; i++) {
                 let bCondition1 = false;
                 let bCondition2 = false;
                 let bCondition3 = false;
@@ -197,115 +195,39 @@ function thinDIB(data, lWidth, lHeight) {
                 if (dataInit[lpSrc * 4]) {
                     continue;
                 }
-                // 获取当前点相邻的5*5区域内像素值，0代表白色，1代表黑色
-                for (let m = 0; m < 5; m++) {
-                    for (let n = 0; n < 5; n++) {
-                        const pixel = lpSrc + ((4 - m) - 2) * lWidth + (n - 2);
+                // 获取当前点相邻的3*3区域内像素值，0代表白色，1代表黑色
+                const bourLength = 3;
+                for (let m = 0; m < bourLength; m++) {
+                    for (let n = 0; n < bourLength; n++) {
+                        const pixel = lpSrc + ((2 - m) - 1) * lWidth + (n - 1);
                         neighBour[m][n] = (255 - dataInit[pixel * 4]) ? 1 : 0;
                     }
                 }
-                // 逐个判断条件
+                const borderArr = [neighBour[0][1], neighBour[0][0], neighBour[1][0], neighBour[2][0],
+                    neighBour[2][1], neighBour[2][2], neighBour[1][2], neighBour[0][2]];
+                let nCount1 = 0;
+                let nCount2 = 0;
+                for (let i = 0, len = borderArr.length; i < len; i++) {
+                    nCount1 += borderArr[i];
+                    if (borderArr[i] === 0 && borderArr[(i + 1) % len] === 1) {
+                        nCount2++;
+                    }
+                }
                 // 判断 2<= NZ(P1)<=6
-                let nCount = neighBour[1][1] + neighBour[1][2] + neighBour[1][3] +
-                    neighBour[2][1] + neighBour[2][3] +
-                    neighBour[3][1] + neighBour[3][2] + neighBour[3][3];
-                if (nCount >= 2 && nCount <= 6) {
+                if (nCount1 >= 2 && nCount1 <= 6) {
                     bCondition1 = true;
                 }
                 // 判断Z0(P1) = 1
-                nCount = 0;
-                if (neighBour[1][2] === 0 && neighBour[1][1] === 1) {
-                    nCount++;
-                }
-                if (neighBour[1][1] === 0 && neighBour[2][1] === 1) {
-                    nCount++;
-                }
-                if (neighBour[2][1] === 0 && neighBour[3][1] === 1) {
-                    nCount++;
-                }
-                if (neighBour[3][1] === 0 && neighBour[3][2] === 1) {
-                    nCount++;
-                }
-                if (neighBour[3][2] === 0 && neighBour[3][3] === 1) {
-                    nCount++;
-                }
-                if (neighBour[3][3] === 0 && neighBour[2][3] === 1) {
-                    nCount++;
-                }
-                if (neighBour[2][3] === 0 && neighBour[1][3] === 1) {
-                    nCount++;
-                }
-                if (neighBour[1][3] === 0 && neighBour[1][2] === 1) {
-                    nCount++;
-                }
-                if (nCount === 1) {
+                if (nCount2 === 1) {
                     bCondition2 = true;
                 }
-                // 判断P2*P4*P8=0 or Z0(P2)!=1
-                if (neighBour[1][2] * neighBour[2][1] * neighBour[2][3] === 0) {
+                // 判断P2*P4*P8=0
+                if (borderArr[0] * borderArr[2] * borderArr[6] === 0) {
                     bCondition3 = true;
-                } else {
-                    nCount = 0;
-                    if (neighBour[0][2] === 0 && neighBour[0][1] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[0][1] === 0 && neighBour[1][1] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[1][1] === 0 && neighBour[2][1] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[2][1] === 0 && neighBour[2][2] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[2][2] === 0 && neighBour[2][3] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[2][3] === 0 && neighBour[1][3] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[1][3] === 0 && neighBour[0][3] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[0][3] === 0 && neighBour[0][2] === 1) {
-                        nCount++;
-                    }
-                    if (nCount !== 1) {
-                        bCondition3 = true;
-                    }
                 }
-                // 判断P2*P4*P6=0 or Z0(P4)!=1
-                if (neighBour[1][2] * neighBour[2][1] * neighBour[3][2] === 0) {
+                // 判断P2*P4*P6=0
+                if (borderArr[0] * borderArr[2] * borderArr[4] === 0) {
                     bCondition4 = true;
-                } else {
-                    nCount = 0;
-                    if (neighBour[1][1] === 0 && neighBour[1][0] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[1][0] === 0 && neighBour[2][0] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[2][0] === 0 && neighBour[3][0] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[3][0] === 0 && neighBour[3][1] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[3][1] === 0 && neighBour[3][2] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[3][2] === 0 && neighBour[2][2] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[2][2] === 0 && neighBour[1][2] === 1) {
-                        nCount++;
-                    }
-                    if (neighBour[1][2] === 0 && neighBour[1][1] === 1) {
-                        nCount++;
-                    }
-                    if (nCount !== 1) {
-                        bCondition4 = true;
-                    }
                 }
                 for (let k = 0; k < 3; k++) {
                     if (bCondition1 && bCondition2 && bCondition3 && bCondition4) {

@@ -16,7 +16,8 @@ export default {
             queryObj: {
                 bthre: 128
             },
-            clickFlag: false
+            clickFlag: false,
+            thresholdFlag: false
         };
     },
     mounted() {
@@ -50,13 +51,14 @@ export default {
             if (this.clickFlag && this.checkQuery()) {
                 thresholdTrans(this.imgData.data, this.queryObj.bthre);
                 this.context.putImageData(this.imgData, 0, 0);
+                this.thresholdFlag = true;
             }
         },
         robertEvent() {
             robertDIB(this.imgData.data, this.width, this.height);
             this.context.putImageData(this.imgData, 0, 0);
         },
-        slbelEvent() {
+        sobelEvent() {
             sobelDIB(this.imgData.data, this.width, this.height);
             this.context.putImageData(this.imgData, 0, 0);
         },
@@ -77,12 +79,16 @@ export default {
             this.context.putImageData(this.imgData, 0, 0);
         },
         contourEvent() {
-            contourDIB(this.imgData.data, this.width, this.height);
-            this.context.putImageData(this.imgData, 0, 0);
+            if (this.thresholdFlag) {
+                contourDIB(this.imgData.data, this.width, this.height);
+                this.context.putImageData(this.imgData, 0, 0);
+            }
         },
         traceEvent() {
-            traceDIB(this.imgData.data, this.width, this.height);
-            this.context.putImageData(this.imgData, 0, 0);
+            if (this.thresholdFlag) {
+                traceDIB(this.imgData.data, this.width, this.height);
+                this.context.putImageData(this.imgData, 0, 0);
+            }
         },
         fillEvent() {
             fill2DIB(this.imgData.data, this.width, this.height);

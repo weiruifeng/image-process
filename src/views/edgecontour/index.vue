@@ -20,20 +20,23 @@
             <button class="button"
                     @click="robertEvent">robert</button>
             <button class="button"
-                    @click="slbelEvent">sobel</button>
+                    @click="sobelEvent">sobel</button>
             <button class="button"
                     @click="prewittEvent">prewitt</button>
             <button class="button"
                     @click="kirschEvent">kirsch</button>
             <button class="button"
                     @click="gaussEvent">gauss</button>
+            <!--<button class="button"-->
+                    <!--@click="houghEvent">hough平行线</button>-->
             <button class="button"
-                    @click="houghEvent">hough平行线</button>
-            <button class="button"
+                    :class="{'disable': !thresholdFlag}"
                     @click="contourEvent">轮廓提取</button>
             <button class="button"
+                    :class="{'disable': !thresholdFlag}"
                     @click="traceEvent">轮廓跟踪</button>
             <button class="button"
+                    :class="{'disable': !thresholdFlag}"
                     @click="fillEvent">种子填充</button>
         </div>
         <div class="body-box">

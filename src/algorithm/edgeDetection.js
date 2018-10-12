@@ -205,19 +205,27 @@ function kirschDIB(data, lWidth, lHeight) {
  * @param lHeight
  */
 function GaussDIB(data, lWidth, lHeight) {
+    // const temObj = {
+    //     iTempW: 5,
+    //     iTempH: 5,
+    //     fCoef: 1,
+    //     iTempMX: 3,
+    //     iTempMY: 3,
+    //     fpArray: [
+    //         -2, -4, -4, -4, -2,
+    //         -4, 0, 8, 0, -4,
+    //         -4, 8, 24, 8, -4,
+    //         -4, 0, 8, 0, -4,
+    //         -2, -4, -4, -4, -2
+    //     ]
+    // };
     const temObj = {
-        iTempW: 5,
-        iTempH: 5,
+        iTempW: 3,
+        iTempH: 3,
         fCoef: 1,
-        iTempMX: 3,
-        iTempMY: 3,
-        fpArray: [
-            -2, -4, -4, -4, -2,
-            -4, 0, 8, 0, -4,
-            -4, 8, 24, 8, -4,
-            -4, 0, 8, 0, -4,
-            -2, -4, -4, -4, -2
-        ]
+        iTempMX: 1,
+        iTempMY: 1,
+        fpArray: [-1, -1, -1, -1, 8, -1, -1, -1, -1]
     };
     template(data, lWidth, lHeight, temObj);
 }

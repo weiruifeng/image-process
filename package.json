@@ -2,7 +2,7 @@
   "engines": {
     "node": "8.9.3"
   },
-  "name": "financePlatform",
+  "name": "image-process",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

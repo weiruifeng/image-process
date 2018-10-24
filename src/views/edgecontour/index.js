@@ -91,7 +91,7 @@ export default {
             }
         },
         fillEvent() {
-            fill2DIB(this.imgData.data, this.width, this.height);
+            fillDIB(this.imgData.data, this.width, this.height);
             this.context.putImageData(this.imgData, 0, 0);
         }
     }

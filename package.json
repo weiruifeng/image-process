@@ -1,14 +1,11 @@
 {
-  "engines": {
-    "node": "8.9.3"
-  },
   "name": "image-process",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=dev webpack-dev-server --open --config ./config/dev.webpack.config.js",
-    "build": "NODE_ENV=production webpack --progress --hide-modules --config ./config/pro.webpack.config.js"
+    "dev": "cross-env NODE_ENV=dev webpack-dev-server --open --config ./config/dev.webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config ./config/pro.webpack.config.js"
   },
   "author": "weiruifeng",
   "license": "ISC",
@@ -44,6 +41,7 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
+    "cross-env": "^7.0.0",
     "d3": "^5.5.0",
     "vue": "^2.5.3",
     "vue-router": "^3.0.1",
